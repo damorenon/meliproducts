@@ -28,7 +28,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			//injects js files as <script> tags into the html template
+			// injects js files as <script> tags into the html template
 			template: path.join(__dirname, 'src/frontend/index.html'),
 			inject: 'body'
 		})
