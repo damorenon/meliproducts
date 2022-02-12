@@ -9,7 +9,6 @@ const { ENV, PORT } = process.env;
 if (ENV === 'dev') console.log('dev config');
 
 app.get('*', (req, res) => {
-	console.log('Hola');
 	res.send({ hello: 'express' });
 });
 
