@@ -1,12 +1,17 @@
+const webpack = require('webpack');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
-	// __dirname: absolute route of current file.
-	entry: path.join(__dirname, 'src/frontend/index.js'),
+	// __dirname: absolute route of current file, webpack-hot-middleware... helps to hot reload.
+	entry: [
+		path.join(__dirname, 'src/frontend/index.js'),
+		'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'
+	],
 	output: {
-		path: path.resolve(__dirname, 'dist')
+		path: path.resolve(__dirname, 'dist'),
+		filename: 'assets/app.js',
+		publicPath: '/'
 	},
 	module: {
 		// rules help webpack to transpile javascript files using babel before bundling them
@@ -20,17 +25,14 @@ module.exports = {
 					options: {
 						// presets tell babel what to transpile (X to Js)
 						// @babel/preset-env' to transpile
-						presets: ['@babel/preset-env', '@babel/preset-react']
+						presets: ['@babel/preset-env', '@babel/preset-react'],
+						plugins: ['react-hot-loader/babel']
 					}
 				}
 			}
 		]
 	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			// injects js files as <script> tags into the html template
-			template: path.join(__dirname, 'src/frontend/index.html'),
-			inject: 'body'
-		})
+		new webpack.HotModuleReplacementPlugin() // helps with server hot reload
 	]
 };
