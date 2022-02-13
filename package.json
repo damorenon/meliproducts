@@ -6,7 +6,7 @@
 	"scripts": {
 		"build": "webpack --mode production",
 		"build:dev": "webpack --mode development",
-		"dev": "webpack-dev-server --mode development --open",
+		"dev:fe": "webpack-dev-server --mode development --open",
 		"start:dev": "nodemon src/server/index"
 	},
 	"keywords": [
@@ -35,6 +35,7 @@
 		"@babel/preset-react": "^7.16.7",
 		"babel-eslint": "^10.1.0",
 		"babel-loader": "^8.2.3",
+		"css-loader": "^6.6.0",
 		"eslint": "^8.9.0",
 		"eslint-config-airbnb": "^19.0.4",
 		"eslint-config-prettier": "^8.3.0",
@@ -43,9 +44,12 @@
 		"eslint-plugin-prettier": "^4.0.0",
 		"eslint-plugin-react": "^7.28.0",
 		"eslint-plugin-react-hooks": "^4.3.0",
+		"mini-css-extract-plugin": "^2.5.3",
 		"nodemon": "^2.0.15",
 		"prettier": "^2.5.1",
 		"react-hot-loader": "^4.13.0",
+		"sass": "^1.49.7",
+		"sass-loader": "^12.4.0",
 		"webpack-cli": "^4.9.2",
 		"webpack-dev-server": "^4.7.4"
 	}

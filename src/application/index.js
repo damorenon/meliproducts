@@ -3,6 +3,7 @@ import SearchBox from './components/searchBox';
 import Breadcrumbs from './components/breadcrumbs';
 import SearchResults from './components/searchResults';
 import ProductDetail from './components/productDetail';
+import './index.scss';
 
 function App() {
 	return (
