@@ -1,7 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from '../application';
 
-ReactDOM.render(
-	<h1>Mercado Libre Búsqueda de productos</h1>,
-	document.getElementById('root')
-);
+ReactDOM.render(<App />, document.getElementById('root'));

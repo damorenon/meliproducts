@@ -1,12 +1,13 @@
 const webpack = require('webpack');
 const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
 	mode: 'development',
 	// __dirname: absolute route of current file, webpack-hot-middleware... helps to hot reload.
 	entry: [
-		path.join(__dirname, 'src/frontend/index.js'),
-		'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'
+		path.join(__dirname, 'src/frontend/index.js')
+		// 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'
 	],
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -33,6 +34,10 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new HtmlWebpackPlugin({
+			template: 'src/frontend/index.html',
+			filename: './index.html'
+		}),
 		new webpack.HotModuleReplacementPlugin() // helps with server hot reload
 	]
 };
