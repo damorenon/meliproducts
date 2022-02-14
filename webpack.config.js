@@ -3,7 +3,9 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-const isDevelopment = process.env.NODE_ENV === 'development';
+require('dotenv').config();
+
+const isDevelopment = process.env.ENV === 'development';
 
 module.exports = {
 	mode: 'development',
@@ -15,7 +17,10 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'assets/app.js',
-		publicPath: '/'
+		publicPath: '/',
+		assetModuleFilename: isDevelopment
+			? 'assets/[name][ext]'
+			: 'assets/[hash][ext]'
 	},
 	module: {
 		// rules help webpack to transpile javascript files using babel before bundling them
@@ -35,7 +40,7 @@ module.exports = {
 				}
 			},
 			{
-				// Geerates 1 single css file with all sass/scss styles
+				// Generates 1 single css file with all sass/scss styles
 				test: /\.s(a|c)ss$/,
 				use: [
 					{
@@ -44,22 +49,30 @@ module.exports = {
 					'css-loader',
 					'sass-loader'
 				]
+			},
+			{
+				test: /\.png/,
+				type: 'asset/resource'
 			}
 		]
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			template: 'src/frontend/index.html',
+			template: path.join(__dirname, 'src/frontend/index.html'),
 			filename: './index.html',
 			inject: 'body'
 		}),
 		new MiniCssExtractPlugin({
-			filename: isDevelopment ? '[name].css' : '[name].[hash].css',
-			chunkFilename: isDevelopment ? '[id].css' : '[id].[hash].css'
+			filename: isDevelopment
+				? 'assets/[name].css'
+				: 'assets/[name].[hash].css',
+			chunkFilename: isDevelopment
+				? 'assets/[id].css'
+				: 'assets/[id].[hash].css'
 		}),
 		new webpack.HotModuleReplacementPlugin() // helps with server hot reload
 	],
 	resolve: {
-		extensions: ['.js', '.scss']
+		extensions: ['.js', '.scss', '.png']
 	}
 };
