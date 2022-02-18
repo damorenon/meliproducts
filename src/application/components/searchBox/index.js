@@ -1,10 +1,10 @@
 import React from 'react';
-import styles from './index.module.scss';
 import logoImage from '../../assets/static/logo.png';
+import './index.scss';
 
 function SearchBox() {
 	return (
-		<div className={styles.container}>
+		<div className="searchbox__container">
 			<img src={logoImage} alt="logo" />
 			SearchBox here
 		</div>

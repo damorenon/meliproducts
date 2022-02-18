@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+// const HtmlWebpackPlugin = require('html-webpack-plugin'); // comment this for SSR
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 require('dotenv').config();
@@ -11,8 +11,8 @@ module.exports = {
 	mode: 'development',
 	// __dirname: absolute route of current file, webpack-hot-middleware... helps to hot reload.
 	entry: [
-		path.join(__dirname, 'src/frontend/index.js')
-		// 'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'
+		path.join(__dirname, 'src/client/index.js'),
+		'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true' // comment this for CSR
 	],
 	output: {
 		path: path.resolve(__dirname, 'dist'),
@@ -40,8 +40,7 @@ module.exports = {
 				}
 			},
 			{
-				// Generates 1 single css file with all sass/scss styles
-				test: /\.s(a|c)ss$/,
+				test: /\.scss$/i,
 				use: [
 					{
 						loader: MiniCssExtractPlugin.loader
@@ -56,12 +55,15 @@ module.exports = {
 			}
 		]
 	},
+	devServer: {
+		historyApiFallback: true
+	},
 	plugins: [
-		new HtmlWebpackPlugin({
-			template: path.join(__dirname, 'src/frontend/index.html'),
-			filename: './index.html',
+		// comment this HtmlWebpackPlugin for SSR
+		/* new HtmlWebpackPlugin({
+			template: path.join(__dirname, 'src/application/index.html'),
 			inject: 'body'
-		}),
+		}), */
 		new MiniCssExtractPlugin({
 			filename: isDevelopment
 				? 'assets/[name].css'

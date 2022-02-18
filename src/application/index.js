@@ -1,21 +1,18 @@
 import React from 'react';
-import SearchBox from './components/searchBox';
-import Breadcrumbs from './components/breadcrumbs';
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/layout';
 import SearchResults from './components/searchResults';
 import ProductDetail from './components/productDetail';
 import './index.scss';
 
 function App() {
 	return (
-		<div>
-			<SearchBox />
-			<Breadcrumbs />
-			<div>
-				Router Here
-				<SearchResults />
-				<ProductDetail />
-			</div>
-		</div>
+		<Routes>
+			<Route path="/" element={<Layout />}>
+				<Route path="items" element={<SearchResults />} />
+				<Route path="items/:id" element={<ProductDetail />} />
+			</Route>
+		</Routes>
 	);
 }
 
