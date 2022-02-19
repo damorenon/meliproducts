@@ -1,0 +1,12 @@
+@use '../../assets/styles/variables';
+
+.header__container {
+	background-color: variables.$meli-yellow;
+	padding: 0 calc(1.5 * variables.$space-xxl);
+}
+
+.main__container {
+	background-color: variables.$meli-grey;
+	flex-grow: 1;
+	padding: 0 calc(1.5 * variables.$space-xxl);
+}
