@@ -1,12 +1,24 @@
 @use '../../assets/styles/variables';
+@use '../../assets/styles/mixins';
 
 .header__container {
 	background-color: variables.$meli-yellow;
-	padding: 0 calc(1.5 * variables.$space-xxl);
 }
 
 .main__container {
 	background-color: variables.$meli-grey;
 	flex-grow: 1;
-	padding: 0 calc(1.5 * variables.$space-xxl);
+}
+
+.header__container,
+.main__container {
+	padding: 0 variables.$space-sm;
+
+	@include mixins.md {
+		padding: 0 variables.$space-xl;
+	}
+
+	@include mixins.lg {
+		padding: 0 calc(1.5 * variables.$space-xxl);
+	}
 }

@@ -47,6 +47,8 @@ function setResponse(reactAppHtml) {
 }
 
 function renderApp(req, res) {
+	console.log('req.url: ', req.url);
+
 	const reactAppHtml = renderToString(
 		<StaticRouter location={req.url}>
 			<App />
