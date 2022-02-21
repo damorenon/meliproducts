@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import logoImage from '../../assets/static/logo.png';
 import iconSearch from '../../assets/static/ic_Search.png';
 import './index.scss';
@@ -19,10 +20,13 @@ function SearchBox() {
 		setSearchInput(event.target.value);
 	}
 
-	function handleFormSubmit(event) {
-		console.log('searchInput: ', searchInput);
-		navigate('/items');
+	async function handleFormSubmit(event) {
 		event.preventDefault();
+		const { data } = await axios(`/api/items?q=${searchInput}`);
+		console.log('dispatch data: ', data);
+		navigate('/items');
+		/* .then((response) => response.json())
+			.then((data) => console.log(data)); */
 	}
 
 	return (

@@ -11,6 +11,7 @@ module.exports = {
 	mode: 'development',
 	// __dirname: absolute route of current file, webpack-hot-middleware... helps to hot reload.
 	entry: [
+		'@babel/polyfill',
 		path.join(__dirname, 'src/client/index.js'),
 		'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true' // comment this for CSR
 	],

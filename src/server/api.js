@@ -60,6 +60,7 @@ export async function searchProducts(query) {
  * @return {Object}
  */
 export async function getProduct() {
+	// TODO: Complete me!
 	const response = await axios(
 		'https://api.mercadolibre.com/items/MLA1123998092'
 	);

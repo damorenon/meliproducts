@@ -68,7 +68,7 @@ app.get('/items/:id', (req, res) => {
 app.get('/api/items', async (req, res) => {
 	// Example: /api/items?q=ipod
 	const products = await searchProducts(req.query.q);
-	res.send({ products });
+	res.send(products);
 });
 
 app.listen(PORT, (err) => {
