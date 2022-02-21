@@ -1,17 +1,17 @@
 @use '../../assets/styles/variables';
 @use '../../assets/styles/mixins';
 
-.header__container {
+.layout__header {
 	background-color: variables.$meli-yellow;
 }
 
-.main__container {
+.layout__main {
 	background-color: variables.$meli-grey;
 	flex-grow: 1;
 }
 
-.header__container,
-.main__container {
+.layout__header,
+.layout__main {
 	padding: 0 variables.$space-sm;
 
 	@include mixins.md {

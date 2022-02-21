@@ -3,11 +3,11 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import webpack from 'webpack';
-
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from '../application';
+import { searchProducts } from './api';
 
 const app = express();
 
@@ -28,6 +28,7 @@ if (ENV === 'development') {
 }
 
 function setResponse(reactAppHtml) {
+	// TODO: take application/index.html template instead of a hardcoded string
 	return `
 		<!DOCTYPE html>
 		<html lang="es">
@@ -46,18 +47,29 @@ function setResponse(reactAppHtml) {
 	`;
 }
 
-function renderApp(req, res) {
-	console.log('req.url: ', req.url);
-
+function renderApp(req) {
 	const reactAppHtml = renderToString(
 		<StaticRouter location={req.url}>
 			<App />
 		</StaticRouter>
 	);
-	res.send(setResponse(reactAppHtml));
+	return setResponse(reactAppHtml);
 }
 
-app.get('*', renderApp);
+/* Application to SSR views */
+app.get('/', (req, res) => {
+	res.send(renderApp(req));
+});
+app.get('/items/:id', (req, res) => {
+	res.send(renderApp(req));
+});
+
+/* API to get products */
+app.get('/api/items', async (req, res) => {
+	// Example: /api/items?q=ipod
+	const products = await searchProducts(req.query.q);
+	res.send({ products });
+});
 
 app.listen(PORT, (err) => {
 	if (err) console.log(err);

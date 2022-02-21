@@ -9,3 +9,25 @@
 .searchbox__logo {
 	margin-right: variables.$space-md;
 }
+
+.searchbox__form {
+	display: flex;
+	width: 100%;
+}
+
+.searchbox__input {
+	border: none;
+	height: 34px;
+	flex-grow: 1;
+	padding: variables.$space-xs calc(2 * variables.$space-xs);
+	outline: none;
+}
+
+.searchbox__submitbutton {
+	border: none;
+	width: 36px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+}

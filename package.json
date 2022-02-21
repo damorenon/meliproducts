@@ -19,8 +19,10 @@
 	"author": "David Moreno",
 	"license": "MIT",
 	"dependencies": {
+		"@babel/polyfill": "^7.12.1",
 		"@babel/register": "^7.17.0",
 		"asset-require-hook": "^1.2.0",
+		"axios": "^0.26.0",
 		"dotenv": "^16.0.0",
 		"express": "^4.17.2",
 		"html-webpack-plugin": "^5.5.0",

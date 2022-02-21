@@ -1,22 +1,16 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 import SearchBox from '../searchBox';
-import Breadcrumbs from '../breadcrumbs';
 import './index.scss';
 
 function Layout() {
 	return (
 		<>
-			<header className="header__container">
+			<header className="layout__header">
 				<SearchBox />
 			</header>
-			<main className="main__container">
-				<nav>
-					<Breadcrumbs />
-				</nav>
-				<section>
-					<Outlet />
-				</section>
+			<main className="layout__main">
+				<Outlet />
 			</main>
 		</>
 	);
