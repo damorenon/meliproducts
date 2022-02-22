@@ -4,9 +4,7 @@ import Breadcrumbs from '../breadcrumbs';
 function ProductDetail() {
 	return (
 		<section>
-			<nav>
-				<Breadcrumbs />
-			</nav>
+			<Breadcrumbs />
 			Product Detail here
 		</section>
 	);

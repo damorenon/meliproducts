@@ -19,11 +19,18 @@
 	border: none;
 	height: 34px;
 	flex-grow: 1;
-	padding: variables.$space-xs calc(2 * variables.$space-xs);
+	padding: variables.$space-xs variables.$space-md;
 	outline: none;
+	color: variables.$meli-black;
+	font-size: 16px; /* NOTE: design says 18px, I disagree */
+}
+
+.searchbox__input::placeholder {
+	color: variables.$meli-grey;
 }
 
 .searchbox__submitbutton {
+	background-color: variables.$meli-light-grey;
 	border: none;
 	width: 36px;
 	display: flex;

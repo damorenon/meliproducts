@@ -20,7 +20,7 @@
 	},
 	"plugins": ["react", "react-hooks", "prettier"],
 	"rules": {
-		"indent": ["error", "tab"],
+		"indent": ["error", "tab", { "SwitchCase": 1 }],
 		"prettier/prettier": ["error", { "useTabs": true }],
 		"react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
 	}

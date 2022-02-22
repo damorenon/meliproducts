@@ -1,0 +1,11 @@
+@use '../../assets/styles/variables';
+
+.breadcrumbs__container {
+	padding: variables.$space-md 0;
+	font-size: 14px;
+	color: variables.$meli-grey;
+}
+
+.breadcrumbs__item-last {
+	font-weight: bold;
+}
