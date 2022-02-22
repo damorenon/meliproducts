@@ -18,7 +18,7 @@
 .searchbox__input {
 	border: none;
 	height: 34px;
-	flex-grow: 1;
+	width: 100%;
 	padding: variables.$space-xs variables.$space-md;
 	outline: none;
 	color: variables.$meli-black;

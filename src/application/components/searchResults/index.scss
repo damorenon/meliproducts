@@ -1,0 +1,45 @@
+@use '../../assets/styles/variables';
+
+// TODO: responsive mobile 1st
+
+.sproduct__container {
+	background-color: variables.$meli-white;
+	display: flex;
+}
+
+.sproduct__picture {
+	padding: variables.$space-md;
+}
+
+.sproduct__infocontainer {
+	width: 100%;
+	display: flex;
+}
+
+.sproduct__pricecontainer {
+	margin-top: calc(1.5 * variables.$space-md);
+	margin-bottom: variables.$space-lg;
+}
+
+.sproduct__info {
+	flex: 0 1 80%;
+	padding-right: calc(2 * variables.$space-xl);
+}
+
+.sproduct__price {
+	font-size: 24px;
+}
+
+.sproduct__freeshipping {
+	margin-left: variables.$space-md;
+}
+
+.sproduct__title {
+	font-size: 18px;
+}
+
+.sproduct__location {
+	font-size: 12px;
+	margin-top: variables.$space-xl;
+	flex: 0 1 20%;
+}

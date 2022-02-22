@@ -39,7 +39,7 @@ export async function searchProducts(query) {
 				},
 				picture: item.thumbnail,
 				condition: item.condition,
-				free_shiping: item.shipping.free_shipping,
+				free_shipping: item.shipping.free_shipping,
 				location: item.address.state_name // NOTE: this Attr is not in the requirements, but the view requests it
 			}));
 		}

@@ -12,11 +12,15 @@ function Breadcrumbs({ categories }) {
 	return (
 		<nav className="breadcrumbs__container">
 			{categories &&
-				categories.length &&
+				!!categories.length &&
 				categories.map((category, index) => {
 					const isLast = index === categories.length - 1;
 					return (
-						<span className={`${isLast ? 'breadcrumbs__item-last' : ''}`}>
+						<span
+							className={`${
+								isLast ? 'breadcrumbs__item-last' : 'breadcrumbs__item'
+							}`}
+						>
 							{category}
 							{`${isLast ? '' : ' > '}`}{' '}
 						</span>
@@ -27,7 +31,7 @@ function Breadcrumbs({ categories }) {
 }
 
 Breadcrumbs.propTypes = {
-	categories: PropTypes.arrayOf(PropTypes.object).isRequired
+	categories: PropTypes.arrayOf(PropTypes.string).isRequired
 };
 
 export default Breadcrumbs;

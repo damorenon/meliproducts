@@ -31,7 +31,7 @@ function setResponse(reactAppHtml) {
 	// TODO: take application/index.html template instead of a hardcoded string
 	return `
 		<!DOCTYPE html>
-		<html lang="es">
+		<html lang="es-CO">
 			<head>
 				<meta charset="UTF-8" />
 				<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -48,6 +48,7 @@ function setResponse(reactAppHtml) {
 }
 
 function renderApp(req) {
+	// TODO: consume api to get data into a context for SSR
 	const reactAppHtml = renderToString(
 		<StaticRouter location={req.url}>
 			<App />
@@ -56,8 +57,12 @@ function renderApp(req) {
 	return setResponse(reactAppHtml);
 }
 
-/* Application to SSR views */
+/* SSR views */
 app.get('/', (req, res) => {
+	res.send(renderApp(req));
+});
+app.get('/items', (req, res) => {
+	// TODO: consider search url param
 	res.send(renderApp(req));
 });
 app.get('/items/:id', (req, res) => {
