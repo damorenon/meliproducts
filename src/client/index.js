@@ -5,11 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import StateProvider from '../application/context';
 import App from '../application';
 
-const initialState = {
-	items: [],
-	categories: []
-};
-const preloadedState = window.__initial_data__ || initialState;
+const preloadedState = window.__initial_data__;
 delete window.__initial_data__;
 
 ReactDOM.hydrate(

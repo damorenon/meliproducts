@@ -1,6 +1,9 @@
 @use '../../assets/styles/variables';
 
 // TODO: responsive mobile 1st
+.searchbox_notfound {
+	margin-top: variables.$space-lg;
+}
 
 .sproduct__container {
 	background-color: variables.$meli-white;

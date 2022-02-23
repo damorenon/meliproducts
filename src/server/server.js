@@ -51,8 +51,7 @@ function setResponse(reactAppHtml, initialData) {
 	`;
 }
 
-function renderApp(req, initialData = null) {
-	// TODO: consume api to get data into a context for SSR
+function renderApp(req, initialData = {}) {
 	const reactAppHtml = renderToString(
 		<StateProvider initialState={initialData}>
 			<StaticRouter location={req.url}>
@@ -69,13 +68,14 @@ app.get('/', (req, res) => {
 });
 
 app.get('/items', async (req, res) => {
+	// Example: /items?search=ipod
 	const searchedProducts = await searchProducts(req.query.search);
 	res.send(renderApp(req, searchedProducts));
 });
 
-app.get('/items/:id', (req, res) => {
+/* app.get('/items/:id', (req, res) => {
 	res.send(renderApp(req));
-});
+}); */
 
 /* API to get products */
 app.get('/api/items', async (req, res) => {

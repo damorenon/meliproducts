@@ -1,4 +1,3 @@
-/* eslint-disable indent */
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { store } from '../../context';
@@ -14,15 +13,22 @@ import './index.scss';
 function SearchResults() {
 	const { state: { items = [], categories = [] } = {} } = useContext(store);
 
+	if (!items.length) {
+		return (
+			// TODO: make a more beautiful message
+			<div className="searchbox_notfound">
+				No hay publicaciones que coincidan con tu búsqueda.
+			</div>
+		);
+	}
+
 	return (
 		<section>
 			<Breadcrumbs categories={categories} />
 			<ul>
-				{items && items.length
-					? items.map((item) => (
-							<SearchedProduct key={item.id} product={item} />
-					  ))
-					: 'No hay publicaciones que coincidan con tu búsqueda.'}
+				{items.map((item) => (
+					<SearchedProduct key={item.id} product={item} />
+				))}
 			</ul>
 		</section>
 	);
@@ -30,8 +36,13 @@ function SearchResults() {
 
 export default SearchResults;
 
-// ----------- subcomponent --------
-
+/**
+ * Component that represents one single searched product.
+ * It's not in a separate folder/file due to it's not reused in any other place
+ *
+ * @param {object} product the object with the data of teh searched product
+ * @returns {JSX.Element}
+ */
 function SearchedProduct({ product }) {
 	const {
 		picture,
@@ -41,6 +52,7 @@ function SearchedProduct({ product }) {
 		title
 	} = product;
 	const { amount } = price;
+
 	return (
 		<li>
 			<article className="sproduct__container">
