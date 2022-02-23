@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
 import './index.scss';
@@ -17,6 +18,7 @@ function Breadcrumbs({ categories }) {
 					const isLast = index === categories.length - 1;
 					return (
 						<span
+							key={`${index}-${category}`}
 							className={`${
 								isLast ? 'breadcrumbs__item-last' : 'breadcrumbs__item'
 							}`}

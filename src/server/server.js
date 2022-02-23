@@ -7,6 +7,7 @@ import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from '../application';
+import StateProvider from '../application/context';
 import { searchProducts } from './api';
 
 const app = express();
@@ -27,7 +28,7 @@ if (ENV === 'development') {
 	app.use(webpackHotMiddleware(compiler));
 }
 
-function setResponse(reactAppHtml) {
+function setResponse(reactAppHtml, initialData) {
 	// TODO: take application/index.html template instead of a hardcoded string
 	return `
 		<!DOCTYPE html>
@@ -41,30 +42,37 @@ function setResponse(reactAppHtml) {
 			</head>
 			<body>
 				<div id="root">${reactAppHtml}</div>
+				<script>
+					window.__initial_data__ = ${JSON.stringify(initialData)}
+				</script>
 				<script src="assets/app.js" type="text/javascript"></script>
 			</body>
 		</html>
 	`;
 }
 
-function renderApp(req) {
+function renderApp(req, initialData = null) {
 	// TODO: consume api to get data into a context for SSR
 	const reactAppHtml = renderToString(
-		<StaticRouter location={req.url}>
-			<App />
-		</StaticRouter>
+		<StateProvider initialState={initialData}>
+			<StaticRouter location={req.url}>
+				<App />
+			</StaticRouter>
+		</StateProvider>
 	);
-	return setResponse(reactAppHtml);
+	return setResponse(reactAppHtml, initialData);
 }
 
 /* SSR views */
 app.get('/', (req, res) => {
 	res.send(renderApp(req));
 });
-app.get('/items', (req, res) => {
-	// TODO: consider search url param
-	res.send(renderApp(req));
+
+app.get('/items', async (req, res) => {
+	const searchedProducts = await searchProducts(req.query.search);
+	res.send(renderApp(req, searchedProducts));
 });
+
 app.get('/items/:id', (req, res) => {
 	res.send(renderApp(req));
 });
@@ -72,8 +80,8 @@ app.get('/items/:id', (req, res) => {
 /* API to get products */
 app.get('/api/items', async (req, res) => {
 	// Example: /api/items?q=ipod
-	const products = await searchProducts(req.query.q);
-	res.send(products);
+	const searchedProducts = await searchProducts(req.query.q);
+	res.send(searchedProducts);
 });
 
 app.listen(PORT, (err) => {

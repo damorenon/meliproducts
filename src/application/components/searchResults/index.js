@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { store } from '../../context';
@@ -17,8 +18,10 @@ function SearchResults() {
 		<section>
 			<Breadcrumbs categories={categories} />
 			<ul>
-				{items && !!items.length
-					? items.map((item) => <SearchedProduct product={item} />)
+				{items && items.length
+					? items.map((item) => (
+							<SearchedProduct key={item.id} product={item} />
+					  ))
 					: 'No hay publicaciones que coincidan con tu búsqueda.'}
 			</ul>
 		</section>
@@ -69,11 +72,11 @@ SearchedProduct.propTypes = {
 	product: PropTypes.shape({
 		id: PropTypes.string,
 		title: PropTypes.string,
-		price: {
+		price: PropTypes.shape({
 			currency: PropTypes.string,
 			amount: PropTypes.number,
 			decimals: PropTypes.number
-		},
+		}),
 		picture: PropTypes.string,
 		condition: PropTypes.string,
 		free_shipping: PropTypes.bool,
