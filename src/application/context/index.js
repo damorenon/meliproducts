@@ -1,7 +1,7 @@
 import React, { useReducer, createContext } from 'react';
 import PropTypes from 'prop-types';
 
-function StateReducer(state, action) {
+function stateReducer(state, action) {
 	const {
 		type,
 		payload: { items, categories }
@@ -27,7 +27,7 @@ const { Provider } = store;
  * @returns {JSX.Element}
  */
 function StateProvider({ initialState, children }) {
-	const [state, dispatch] = useReducer(StateReducer, initialState);
+	const [state, dispatch] = useReducer(stateReducer, initialState);
 	return <Provider value={{ state, dispatch }}>{children}</Provider>;
 }
 

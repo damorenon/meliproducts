@@ -1,4 +1,4 @@
-require('ignore-styles'); // ignore styles when rendering the app on server side
+require('ignore-styles'); // ignores styles when rendering the app on server side
 require('@babel/polyfill'); // Helps Babel with some new ES6 features like async/await
 
 require('@babel/register')({

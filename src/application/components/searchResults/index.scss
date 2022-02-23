@@ -1,8 +1,17 @@
 @use '../../assets/styles/variables';
+@use '../../assets/styles/mixins';
 
-// TODO: responsive mobile 1st
 .searchbox_notfound {
 	margin-top: variables.$space-lg;
+}
+
+.searchbox_itemslist {
+	margin-bottom: variables.$space-xxl;
+}
+
+/* Single item styles */
+.sproduct__item {
+	border-bottom: thin solid variables.$meli-light-grey;
 }
 
 .sproduct__container {
@@ -11,26 +20,54 @@
 }
 
 .sproduct__picture {
-	padding: variables.$space-md;
+	padding: variables.$space-xs;
+
+	@include mixins.md {
+		padding: variables.$space-md;
+	}
 }
 
 .sproduct__infocontainer {
 	width: 100%;
 	display: flex;
-}
+	flex-direction: column;
 
-.sproduct__pricecontainer {
-	margin-top: calc(1.5 * variables.$space-md);
-	margin-bottom: variables.$space-lg;
+	@include mixins.md {
+		flex-direction: row;
+	}
 }
 
 .sproduct__info {
-	flex: 0 1 80%;
-	padding-right: calc(2 * variables.$space-xl);
+	flex: 0 1 60%;
+	padding-right: variables.$space-sm;
+
+	@include mixins.sm {
+		padding-right: variables.$space-lg;
+	}
+
+	@include mixins.md {
+		flex: 0 1 80%;
+		padding-right: calc(2 * variables.$space-xl);
+	}
+}
+
+.sproduct__pricecontainer {
+	display: flex;
+	align-items: center;
+	margin-top: calc(1.5 * variables.$space-md);
+	margin-bottom: variables.$space-sm;
+
+	@include mixins.md {
+		margin-bottom: variables.$space-lg;
+	}
 }
 
 .sproduct__price {
-	font-size: 24px;
+	font-size: 20px;
+
+	@include mixins.md {
+		font-size: 24px;
+	}
 }
 
 .sproduct__freeshipping {
@@ -38,11 +75,20 @@
 }
 
 .sproduct__title {
-	font-size: 18px;
+	font-size: 14px;
+
+	@include mixins.md {
+		font-size: 18px;
+	}
 }
 
 .sproduct__location {
 	font-size: 12px;
-	margin-top: variables.$space-xl;
 	flex: 0 1 20%;
+	margin-top: variables.$space-xs;
+	margin-bottom: variables.$space-xs;
+
+	@include mixins.md {
+		margin-top: variables.$space-xl;
+	}
 }

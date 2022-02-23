@@ -25,7 +25,7 @@ function SearchResults() {
 	return (
 		<section>
 			<Breadcrumbs categories={categories} />
-			<ul>
+			<ul className="searchbox_itemslist">
 				{items.map((item) => (
 					<SearchedProduct key={item.id} product={item} />
 				))}
@@ -47,21 +47,22 @@ function SearchedProduct({ product }) {
 	const {
 		picture,
 		location,
-		price, // TODO: apply money format
+		price,
 		free_shipping: freeShipping,
 		title
 	} = product;
 	const { amount } = price;
 
 	return (
-		<li>
+		<li className="sproduct__item">
 			<article className="sproduct__container">
 				<figure className="sproduct__picture">
-					<img height="180" width="180" src={picture} alt="searched product" />
+					<img height="160" width="160" src={picture} alt="searched product" />
 				</figure>
 				<section className="sproduct__infocontainer">
 					<div className="sproduct__info">
 						<div className="sproduct__pricecontainer">
+							{/* TODO: apply price format */}
 							<span className="sproduct__price">{`$ ${amount}`}</span>
 							{freeShipping && (
 								<img
@@ -72,6 +73,7 @@ function SearchedProduct({ product }) {
 							)}
 						</div>
 						<h2 className="sproduct__title">{title}</h2>
+						{/* TODO: how to add "completo único" ? */}
 					</div>
 					<div className="sproduct__location">{location}</div>
 				</section>
