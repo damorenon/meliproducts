@@ -8,7 +8,7 @@ import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
 import App from '../application';
 import StateProvider from '../application/context';
-import { searchProducts } from './api';
+import { searchProducts, getProductDetail } from './api';
 
 const app = express();
 
@@ -73,15 +73,22 @@ app.get('/items', async (req, res) => {
 	res.send(renderApp(req, searchedProducts));
 });
 
-/* app.get('/items/:id', (req, res) => {
+app.get('/items/:id', (req, res) => {
+	// TODO: complete me!
 	res.send(renderApp(req));
-}); */
+});
 
 /* API to get products */
 app.get('/api/items', async (req, res) => {
 	// Example: /api/items?q=ipod
 	const searchedProducts = await searchProducts(req.query.q);
 	res.send(searchedProducts);
+});
+
+app.get('/api/items/:id', async (req, res) => {
+	// Example: /api/items/MLA1123998092
+	const product = await getProductDetail(req.params.id);
+	res.send(product);
 });
 
 app.listen(PORT, (err) => {

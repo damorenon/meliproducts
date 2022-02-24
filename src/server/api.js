@@ -1,4 +1,9 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
+
+dotenv.config();
+const { API_URL } = process.env;
+const author = { name: 'David', lastname: 'Moreno' };
 
 /**
  * Method to get search's related products
@@ -10,9 +15,7 @@ export async function searchProducts(query) {
 	let categories = [];
 
 	try {
-		const response = await axios(
-			`https://api.mercadolibre.com/sites/MLA/search?q=${query}`
-		);
+		const response = await axios(`${API_URL}/sites/MLA/search?q=${query}`);
 		const {
 			data: { filters, results }
 		} = response;
@@ -20,7 +23,7 @@ export async function searchProducts(query) {
 		// set categories for Breadcrumbs
 		if (filters && filters.length) {
 			const categoryFilter = filters.find((item) => item.id === 'category');
-			if (categoryFilter) {
+			if (categoryFilter && categoryFilter.values && categoryFilter.values[0]) {
 				categories = categoryFilter.values[0].path_from_root.map(
 					(item) => item.name
 				);
@@ -35,7 +38,8 @@ export async function searchProducts(query) {
 				price: {
 					currency: item.currency_id,
 					amount: item.price,
-					decimals: 2 // TODO: it's not in search API, most likely we'll need a 2nd query with currency_id
+					decimals: 2, // NOTE: it's not in search API, it should be there, it should not do 4 api calls here,
+					simbol: '$'
 				},
 				picture: item.thumbnail,
 				condition: item.condition,
@@ -44,14 +48,19 @@ export async function searchProducts(query) {
 			}));
 		}
 	} catch (error) {
-		console.log('Error while getting api.mercadolibre.com/sites/MLA/search');
+		console.log(`Error while getting ${API_URL}/sites/MLA/search?q=${query}`);
 	}
 
 	return {
-		author: { name: 'David', lastname: 'Moreno' },
+		author,
 		categories,
 		items
 	};
+}
+
+async function fetcher(url) {
+	const response = await axios(url);
+	return response;
 }
 
 /**
@@ -59,10 +68,65 @@ export async function searchProducts(query) {
  * @param {string} productId String that contains the id of the product to be searched
  * @return {Object}
  */
-export async function getProduct() {
-	// TODO: Complete me!
-	const response = await axios(
-		'https://api.mercadolibre.com/items/MLA1123998092'
-	);
-	return response;
+export async function getProductDetail(productId) {
+	let item = {};
+	let categories = [];
+
+	try {
+		const productPromises = Promise.all([
+			fetcher(`${API_URL}/items/${productId}`),
+			fetcher(`${API_URL}/items/${productId}/description`)
+		]);
+		const [itemResponse, descriptionResponse] = await productPromises;
+		const { data: productInfo } = itemResponse;
+
+		if (productInfo) {
+			const { currency_id: currencyId, category_id: categoryId } = productInfo;
+			const dataPromises = Promise.all([
+				fetcher(`${API_URL}/categories/${categoryId}`),
+				fetcher(`${API_URL}/currencies/${currencyId}`)
+			]);
+			const [categoryResponse, currencyResponse] = await dataPromises;
+
+			const {
+				data: { path_from_root: categoriesList }
+			} = categoryResponse;
+
+			if (categoriesList && categoriesList.length) {
+				categories = categoriesList.map((category) => category.name);
+			}
+
+			const {
+				data: { simbol, decimal_places: decimalPlaces }
+			} = currencyResponse;
+
+			const {
+				data: { plain_text: description }
+			} = descriptionResponse;
+
+			item = {
+				id: productInfo.id,
+				title: productInfo.title,
+				price: {
+					currency: currencyId,
+					amount: productInfo.price,
+					decimals: decimalPlaces,
+					simbol // NOTE: this Attr is not in the requirements, but the view requests it
+				},
+				picture: productInfo.thumbnail,
+				condition: productInfo.condition,
+				free_shipping: productInfo.shipping.free_shipping,
+				sold_quantity: productInfo.sold_quantity,
+				description
+			};
+		}
+	} catch (error) {
+		console.log(`Error while getting ${API_URL}/items/${productId} and others`);
+	}
+
+	return {
+		author,
+		item,
+		categories
+	};
 }
