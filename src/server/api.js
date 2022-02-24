@@ -20,18 +20,8 @@ export async function searchProducts(query) {
 			data: { filters, results }
 		} = response;
 
-		// set categories for Breadcrumbs
-		if (filters && filters.length) {
-			const categoryFilter = filters.find((item) => item.id === 'category');
-			if (categoryFilter && categoryFilter.values && categoryFilter.values[0]) {
-				categories = categoryFilter.values[0].path_from_root.map(
-					(item) => item.name
-				);
-			}
-		}
-
-		// set searched items, 1st 4 products
 		if (results && results.length) {
+			// set searched items
 			items = results.slice(0, 4).map((item) => ({
 				id: item.id,
 				title: item.title,
@@ -46,6 +36,20 @@ export async function searchProducts(query) {
 				free_shipping: item.shipping.free_shipping,
 				location: item.address.state_name // NOTE: this Attr is not in the requirements, but the view requests it
 			}));
+
+			// set categories for Breadcrumbs
+			if (filters && filters.length) {
+				const categoryFilter = filters.find((item) => item.id === 'category');
+				if (
+					categoryFilter &&
+					categoryFilter.values &&
+					categoryFilter.values[0]
+				) {
+					categories = categoryFilter.values[0].path_from_root.map(
+						(item) => item.name
+					);
+				}
+			}
 		}
 	} catch (error) {
 		console.log(`Error while getting ${API_URL}/sites/MLA/search?q=${query}`);
@@ -78,7 +82,7 @@ export async function getProductDetail(productId) {
 			fetcher(`${API_URL}/items/${productId}/description`)
 		]);
 		const [itemResponse, descriptionResponse] = await productPromises;
-		const { data: productInfo } = itemResponse;
+		const { data: productInfo = null } = itemResponse;
 
 		if (productInfo) {
 			const { currency_id: currencyId, category_id: categoryId } = productInfo;
@@ -89,14 +93,6 @@ export async function getProductDetail(productId) {
 			const [categoryResponse, currencyResponse] = await dataPromises;
 
 			const {
-				data: { path_from_root: categoriesList }
-			} = categoryResponse;
-
-			if (categoriesList && categoriesList.length) {
-				categories = categoriesList.map((category) => category.name);
-			}
-
-			const {
 				data: { simbol, decimal_places: decimalPlaces }
 			} = currencyResponse;
 
@@ -104,6 +100,7 @@ export async function getProductDetail(productId) {
 				data: { plain_text: description }
 			} = descriptionResponse;
 
+			// set Item stuff
 			item = {
 				id: productInfo.id,
 				title: productInfo.title,
@@ -119,6 +116,15 @@ export async function getProductDetail(productId) {
 				sold_quantity: productInfo.sold_quantity,
 				description
 			};
+
+			// set categories for Breadcrumbs
+			const {
+				data: { path_from_root: categoriesList }
+			} = categoryResponse;
+
+			if (categoriesList && categoriesList.length) {
+				categories = categoriesList.map((category) => category.name);
+			}
 		}
 	} catch (error) {
 		console.log(`Error while getting ${API_URL}/items/${productId} and others`);
