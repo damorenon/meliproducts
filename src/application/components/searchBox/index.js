@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { store } from '../../context';
 import logoImage from '../../assets/static/logo.png';
 import iconSearch from '../../assets/static/ic_Search.png';
@@ -24,26 +24,31 @@ function SearchBox() {
 
 	async function searchProducts(event) {
 		event.preventDefault(); // To avoid page reload by default
-		const { data: searchedProducts } = await axios(
-			`/api/items?q=${searchInput}`
-		);
-		const { items, categories } = searchedProducts;
+		const {
+			data: { searchedProducts }
+		} = await axios(`/api/items?q=${searchInput}`);
 		dispatch({
 			type: 'SET_SEARCHED_PRODUCTS',
-			payload: { items, categories }
+			payload: { searchedProducts }
 		});
-		navigate('/items');
+		navigate(`/items?search=${searchInput}`);
 	}
-
 	return (
 		<div className="searchbox__container">
-			<img
-				src={logoImage}
-				alt="logo"
-				height="34"
-				width="50"
-				className="searchbox__logo"
-			/>
+			<Link
+				to="/"
+				onClick={() => {
+					setSearchInput('');
+				}}
+			>
+				<img
+					src={logoImage}
+					alt="logo"
+					height="34"
+					width="50"
+					className="searchbox__logo"
+				/>
+			</Link>
 			<form className="searchbox__form" onSubmit={searchProducts}>
 				<input
 					type="text"

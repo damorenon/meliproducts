@@ -45,16 +45,16 @@ function setResponse(reactAppHtml, initialData) {
 				<script>
 					window.__initial_data__ = ${JSON.stringify(initialData)}
 				</script>
-				<script src="assets/app.js" type="text/javascript"></script>
+				<script src="/assets/app.js" type="text/javascript"></script>
 			</body>
 		</html>
 	`;
 }
 
-function renderApp(req, initialData = {}) {
+function renderApp(url, initialData = {}) {
 	const reactAppHtml = renderToString(
 		<StateProvider initialState={initialData}>
-			<StaticRouter location={req.url}>
+			<StaticRouter location={url}>
 				<App />
 			</StaticRouter>
 		</StateProvider>
@@ -64,31 +64,31 @@ function renderApp(req, initialData = {}) {
 
 /* SSR views */
 app.get('/', (req, res) => {
-	res.send(renderApp(req));
+	res.send(renderApp(req.url));
 });
 
 app.get('/items', async (req, res) => {
 	// Example: /items?search=ipod
 	const searchedProducts = await searchProducts(req.query.search);
-	res.send(renderApp(req, searchedProducts));
+	res.send(renderApp(req.url, { searchedProducts }));
 });
 
-app.get('/items/:id', (req, res) => {
-	// TODO: complete me!
-	res.send(renderApp(req));
+app.get('/items/:id', async (req, res) => {
+	const productDetail = await getProductDetail(req.params.id);
+	res.send(renderApp(req.url, { productDetail }));
 });
 
 /* API to get products */
 app.get('/api/items', async (req, res) => {
 	// Example: /api/items?q=ipod
 	const searchedProducts = await searchProducts(req.query.q);
-	res.send(searchedProducts);
+	res.send({ searchedProducts });
 });
 
 app.get('/api/items/:id', async (req, res) => {
 	// Example: /api/items/MLA1123998092
-	const product = await getProductDetail(req.params.id);
-	res.send(product);
+	const productDetail = await getProductDetail(req.params.id);
+	res.send({ productDetail });
 });
 
 app.listen(PORT, (err) => {

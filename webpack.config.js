@@ -9,7 +9,7 @@ const isDevelopment = process.env.ENV === 'development';
 
 module.exports = {
 	mode: 'development',
-	// __dirname: absolute route of current file, webpack-hot-middleware... helps to hot reload.
+	devtool: 'inline-source-map',
 	entry: [
 		'@babel/polyfill',
 		path.join(__dirname, 'src/client/index.js'),

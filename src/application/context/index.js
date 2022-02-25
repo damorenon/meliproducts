@@ -2,22 +2,21 @@ import React, { useReducer, createContext } from 'react';
 import PropTypes from 'prop-types';
 
 function stateReducer(state, action) {
-	const {
-		type,
-		payload: { items, categories }
-	} = action;
+	const { type, payload: { searchedProducts = {}, productDetail = {} } = {} } =
+		action;
 	switch (type) {
 		case 'SET_SEARCHED_PRODUCTS':
-			return { items, categories };
+			return { searchedProducts };
+		case 'SET_PRODUCT_DETAIL':
+			return { ...state, productDetail };
+		case 'CLEAN_PRODUCT_DETAIL':
+			return { ...state, productDetail: {} };
 		default:
 			return state;
 	}
 }
 
-export const store = createContext({
-	items: [],
-	categories: []
-});
+export const store = createContext({ searchedProducts: {}, productDetail: {} });
 const { Provider } = store;
 
 /**
@@ -33,8 +32,9 @@ function StateProvider({ initialState, children }) {
 
 StateProvider.propTypes = {
 	initialState: PropTypes.shape({
-		items: PropTypes.arrayOf(PropTypes.object).isRequired,
-		categories: PropTypes.arrayOf(PropTypes.string).isRequired
+		// TODO: fix me!
+		searchedProducts: PropTypes.objectOf(PropTypes.object),
+		productDetail: PropTypes.objectOf(PropTypes.object)
 	}).isRequired,
 	children: PropTypes.node.isRequired
 };

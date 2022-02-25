@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { store } from '../../context';
 import Breadcrumbs from '../breadcrumbs';
@@ -11,7 +12,8 @@ import './index.scss';
  * @return {JSX.Element}
  */
 function SearchResults() {
-	const { state: { items = [], categories = [] } = {} } = useContext(store);
+	const { state: { searchedProducts = {} } = {} } = useContext(store);
+	const { items = [], categories = [] } = searchedProducts;
 
 	if (!items.length) {
 		return (
@@ -45,6 +47,7 @@ export default SearchResults;
  */
 function SearchedProduct({ product }) {
 	const {
+		id,
 		picture,
 		location,
 		price,
@@ -57,7 +60,14 @@ function SearchedProduct({ product }) {
 		<li className="sproduct__item">
 			<article className="sproduct__container">
 				<figure className="sproduct__picture">
-					<img height="160" width="160" src={picture} alt="searched product" />
+					<Link to={id}>
+						<img
+							height="160"
+							width="160"
+							src={picture}
+							alt="searched product"
+						/>
+					</Link>
 				</figure>
 				<section className="sproduct__infocontainer">
 					<div className="sproduct__info">
@@ -72,7 +82,9 @@ function SearchedProduct({ product }) {
 								/>
 							)}
 						</div>
-						<h2 className="sproduct__title">{title}</h2>
+						<h2 className="sproduct__title">
+							<Link to={id}>{title}</Link>
+						</h2>
 						{/* TODO: how to add "completo único" ? */}
 					</div>
 					<div className="sproduct__location">{location}</div>
