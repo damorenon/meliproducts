@@ -32,9 +32,49 @@ function StateProvider({ initialState, children }) {
 
 StateProvider.propTypes = {
 	initialState: PropTypes.shape({
-		// TODO: fix me!
-		searchedProducts: PropTypes.objectOf(PropTypes.object),
-		productDetail: PropTypes.objectOf(PropTypes.object)
+		searchedProducts: PropTypes.shape({
+			author: PropTypes.shape({
+				name: PropTypes.string,
+				lastname: PropTypes.string
+			}),
+			categories: PropTypes.arrayOf(PropTypes.string),
+			items: PropTypes.shape({
+				id: PropTypes.string,
+				title: PropTypes.string,
+				price: PropTypes.shape({
+					currency: PropTypes.string,
+					amount: PropTypes.number,
+					decimals: PropTypes.number,
+					symbol: PropTypes.string
+				}),
+				picture: PropTypes.string,
+				condition: PropTypes.string,
+				free_shipping: PropTypes.bool,
+				location: PropTypes.string
+			})
+		}),
+		productDetail: PropTypes.shape({
+			author: PropTypes.shape({
+				name: PropTypes.string,
+				lastname: PropTypes.string
+			}),
+			categories: PropTypes.arrayOf(PropTypes.string),
+			items: PropTypes.shape({
+				id: PropTypes.string,
+				title: PropTypes.string,
+				price: PropTypes.shape({
+					currency: PropTypes.string,
+					amount: PropTypes.number,
+					decimals: PropTypes.number,
+					symbol: PropTypes.string
+				}),
+				picture: PropTypes.string,
+				condition: PropTypes.string,
+				free_shipping: PropTypes.bool,
+				sold_quantity: PropTypes.number,
+				description: PropTypes.string
+			})
+		})
 	}).isRequired,
 	children: PropTypes.node.isRequired
 };

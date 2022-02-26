@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { store } from '../../context';
 import Breadcrumbs from '../breadcrumbs';
 import freeShippingIcon from '../../assets/static/ic_shipping.png';
+import notFoundIcon from '../../assets/static/ic_notfound.png';
 import './index.scss';
 
 /**
@@ -17,9 +18,17 @@ function SearchResults() {
 
 	if (!items.length) {
 		return (
-			// TODO: make a more beautiful message
-			<div className="searchbox_notfound">
-				No hay publicaciones que coincidan con tu búsqueda.
+			<div className="searchbox__notfound">
+				<img src={notFoundIcon} alt="Not found icon" />
+				<div>
+					<h3 className="searchbox__notfoundtitle">
+						No hay publicaciones que coincidan con tu búsqueda.
+					</h3>
+					<ul className="searchbox__notfoundreasons">
+						<li>Revisa la ortografía de la palabra</li>
+						<li>Utiliza palabras más genéricas o menos palabras</li>
+					</ul>
+				</div>
 			</div>
 		);
 	}
@@ -27,7 +36,7 @@ function SearchResults() {
 	return (
 		<section>
 			<Breadcrumbs categories={categories} />
-			<ul className="searchbox_itemslist">
+			<ul className="searchbox__itemslist">
 				{items.map((item) => (
 					<SearchedProduct key={item.id} product={item} />
 				))}
@@ -50,30 +59,37 @@ function SearchedProduct({ product }) {
 		id,
 		picture,
 		location,
-		price,
+		price = {},
 		free_shipping: freeShipping,
 		title
 	} = product;
-	const { amount } = price;
+
+	function formatPrice({ symbol, amount, decimals }) {
+		// NOTE: 'es-ES' does not forma 4 digit numbers as expected
+		const numberFormat = new Intl.NumberFormat('de-DE', {
+			maximumFractionDigits: decimals
+		});
+		return `${symbol} ${numberFormat.format(parseFloat(amount))}`;
+	}
 
 	return (
 		<li className="sproduct__item">
 			<article className="sproduct__container">
-				<figure className="sproduct__picture">
+				<figure className="sproduct__imagecontainer">
 					<Link to={id}>
 						<img
-							height="160"
-							width="160"
+							height="180"
+							width="180"
 							src={picture}
 							alt="searched product"
+							className="sproduct__image"
 						/>
 					</Link>
 				</figure>
 				<section className="sproduct__infocontainer">
 					<div className="sproduct__info">
 						<div className="sproduct__pricecontainer">
-							{/* TODO: apply price format */}
-							<span className="sproduct__price">{`$ ${amount}`}</span>
+							<span className="sproduct__price">{formatPrice(price)}</span>
 							{freeShipping && (
 								<img
 									src={freeShippingIcon}
@@ -101,7 +117,8 @@ SearchedProduct.propTypes = {
 		price: PropTypes.shape({
 			currency: PropTypes.string,
 			amount: PropTypes.number,
-			decimals: PropTypes.number
+			decimals: PropTypes.number,
+			symbol: PropTypes.string
 		}),
 		picture: PropTypes.string,
 		condition: PropTypes.string,

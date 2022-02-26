@@ -1,0 +1,116 @@
+@use '../../assets/styles/variables';
+@use '../../assets/styles/mixins';
+
+.productdetail__container {
+	background-color: variables.$meli-white;
+	width: 100%;
+	padding: variables.$space-lg variables.$space-lg 0;
+	margin-bottom: variables.$space-xxl;
+	display: flex;
+	flex-direction: column;
+
+	@include mixins.md {
+		flex-direction: row;
+	}
+}
+
+.productdetail__product {
+	display: flex;
+	flex-direction: column;
+
+	@include mixins.md {
+		flex: 0 1 60%;
+	}
+
+	@include mixins.lg {
+		flex: 0 1 70%;
+	}
+}
+
+.productdetail__detail {
+	@include mixins.md {
+		flex: 0 1 40%;
+	}
+
+	@include mixins.lg {
+		flex: 0 1 30%;
+	}
+}
+
+.productdetail__imagecontainer {
+	margin-bottom: variables.$space-xxl;
+	display: flex;
+	justify-content: center;
+	min-height: 615px;
+
+	@include mixins.md {
+		padding-right: variables.$space-md;
+	}
+}
+
+.producdetail__image {
+	height: auto;
+	max-width: 680px;
+	width: 100%;
+}
+
+.productdetail__desctitle {
+	margin-bottom: variables.$space-lg;
+	font-size: 24px;
+
+	@include mixins.md {
+		font-size: 26px;
+	}
+
+	@include mixins.lg {
+		font-size: 28px;
+	}
+}
+
+.productdetail__description {
+	margin-bottom: variables.$space-lg;
+	white-space: pre-wrap;
+}
+
+.productdetail__condition {
+	font-size: 14px;
+	margin-bottom: variables.$space-md;
+}
+
+.productdetail__title {
+	margin-bottom: variables.$space-lg;
+	font-weight: 600;
+	font-size: 20px;
+
+	@include mixins.md {
+		font-size: 22px;
+	}
+
+	@include mixins.lg {
+		font-size: 24px;
+	}
+}
+
+.productdetail__price {
+	margin-bottom: variables.$space-lg;
+	font-size: 42px;
+
+	@include mixins.md {
+		font-size: 44px;
+	}
+
+	@include mixins.lg {
+		font-size: 46px;
+	}
+}
+
+.productdetail__button {
+	background-color: variables.$meli-blue;
+	color: variables.$meli-white;
+	width: 100%;
+	padding: variables.$space-sm;
+	margin-bottom: variables.$space-lg;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+}

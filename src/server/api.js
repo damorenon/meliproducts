@@ -29,7 +29,7 @@ export async function searchProducts(query) {
 					currency: item.currency_id,
 					amount: item.price,
 					decimals: 2, // NOTE: it's not in search API, it should be there, it should not do 4 api calls here,
-					simbol: '$'
+					symbol: '$'
 				},
 				picture: item.thumbnail,
 				condition: item.condition,
@@ -93,7 +93,7 @@ export async function getProductDetail(productId) {
 			const [categoryResponse, currencyResponse] = await dataPromises;
 
 			const {
-				data: { simbol, decimal_places: decimalPlaces }
+				data: { symbol, decimal_places: decimalPlaces }
 			} = currencyResponse;
 
 			const {
@@ -108,7 +108,7 @@ export async function getProductDetail(productId) {
 					currency: currencyId,
 					amount: productInfo.price,
 					decimals: decimalPlaces,
-					simbol // NOTE: this Attr is not in the requirements, but the view requests it
+					symbol // NOTE: this Attr is not in the requirements, but the view requests it
 				},
 				picture: productInfo.thumbnail,
 				condition: productInfo.condition,

@@ -1,11 +1,28 @@
 @use '../../assets/styles/variables';
 @use '../../assets/styles/mixins';
 
-.searchbox_notfound {
+.searchbox__notfound {
 	margin-top: variables.$space-lg;
+	padding: variables.$space-lg;
+	background-color: variables.$meli-white;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
 }
 
-.searchbox_itemslist {
+.searchbox__notfoundtitle {
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.08;
+	margin-bottom: variables.$space-md;
+}
+
+.searchbox__notfoundreasons {
+	list-style-type: square;
+	padding-left: variables.$space-md;
+}
+
+.searchbox__itemslist {
 	margin-bottom: variables.$space-xxl;
 }
 
@@ -17,14 +34,23 @@
 .sproduct__container {
 	background-color: variables.$meli-white;
 	display: flex;
-}
-
-.sproduct__picture {
 	padding: variables.$space-xs;
 
 	@include mixins.md {
 		padding: variables.$space-md;
 	}
+}
+
+.sproduct__imagecontainer {
+	padding-right: variables.$space-xs;
+
+	@include mixins.md {
+		padding-right: variables.$space-md;
+	}
+}
+
+.sproduct__image {
+	border-radius: 4px;
 }
 
 .sproduct__infocontainer {
@@ -54,7 +80,7 @@
 .sproduct__pricecontainer {
 	display: flex;
 	align-items: center;
-	margin-top: calc(1.5 * variables.$space-md);
+	margin-top: variables.$space-md;
 	margin-bottom: variables.$space-sm;
 
 	@include mixins.md {

@@ -12,7 +12,7 @@ function App() {
 				<Route path="items" element={<SearchResults />} />
 				<Route path="items/:id" element={<ProductDetail />} />
 			</Route>
-			{/* TODO: ADD not found route */}
+			{/* TODO: <Route path="*" element={<NotFound />} /> */}
 		</Routes>
 	);
 }

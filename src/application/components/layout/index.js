@@ -3,6 +3,11 @@ import { Outlet } from 'react-router-dom';
 import SearchBox from '../searchBox';
 import './index.scss';
 
+/**
+ * Component that handles the layout of the app
+ *
+ * @returns {JSX.Element}
+ */
 function Layout() {
 	return (
 		<>
