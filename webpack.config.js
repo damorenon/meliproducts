@@ -5,7 +5,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 require('dotenv').config();
 
-const isDevelopment = process.env.ENV === 'development';
+const isDev = process.env.ENV === 'development';
 
 module.exports = {
 	mode: 'development',
@@ -19,9 +19,7 @@ module.exports = {
 		path: path.resolve(__dirname, 'dist'),
 		filename: 'assets/app.js',
 		publicPath: '/',
-		assetModuleFilename: isDevelopment
-			? 'assets/[name][ext]'
-			: 'assets/[hash][ext]'
+		assetModuleFilename: isDev ? 'assets/[name][ext]' : 'assets/[hash][ext]'
 	},
 	module: {
 		// rules help webpack to transpile javascript files using babel before bundling them
@@ -66,12 +64,8 @@ module.exports = {
 			inject: 'body'
 		}), */
 		new MiniCssExtractPlugin({
-			filename: isDevelopment
-				? 'assets/[name].css'
-				: 'assets/[name].[hash].css',
-			chunkFilename: isDevelopment
-				? 'assets/[id].css'
-				: 'assets/[id].[hash].css'
+			filename: isDev ? 'assets/[name].css' : 'assets/[name].[hash].css',
+			chunkFilename: isDev ? 'assets/[id].css' : 'assets/[id].[hash].css'
 		}),
 		new webpack.HotModuleReplacementPlugin() // helps with server hot reload
 	],

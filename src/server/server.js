@@ -3,6 +3,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import webpack from 'webpack';
+import helmet from 'helmet';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { StaticRouter } from 'react-router-dom/server';
@@ -26,6 +27,15 @@ if (ENV === 'development') {
 	const serverConfig = { serverSideRender: true, publicPath };
 	app.use(webpackDevMiddleware(compiler, serverConfig));
 	app.use(webpackHotMiddleware(compiler));
+} else {
+	// for production environment
+	app.use(express.static(`${__dirname}/public`)); // where to put bundles
+	app.use(helmet()); // helps you secure your Express apps by setting various HTTP headers
+	app.use((req, res, next) => {
+		// Do not expose the server framework
+		res.removeHeader('X-Powered-By');
+		next();
+	});
 }
 
 function setResponse(reactAppHtml, initialData) {

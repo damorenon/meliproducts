@@ -65,7 +65,7 @@ function SearchedProduct({ product }) {
 	} = product;
 
 	function formatPrice({ symbol, amount, decimals }) {
-		// NOTE: 'es-ES' does not forma 4 digit numbers as expected
+		// NOTE: 'es-ES' does not format 4 digit numbers as expected
 		const numberFormat = new Intl.NumberFormat('de-DE', {
 			maximumFractionDigits: decimals
 		});
