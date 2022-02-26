@@ -10,6 +10,7 @@ import { StaticRouter } from 'react-router-dom/server';
 import App from '../application';
 import StateProvider from '../application/context';
 import { searchProducts, getProductDetail } from './api';
+import getManifest from './getManifest';
 
 const app = express();
 
@@ -17,7 +18,6 @@ dotenv.config();
 const { ENV, PORT } = process.env;
 
 if (ENV === 'development') {
-	console.log('development config');
 	// Config to have live-reloading on server, ony for development purposes
 	const webpackConfig = require('../../webpack.config');
 	const webpackDevMiddleware = require('webpack-dev-middleware');
@@ -27,19 +27,28 @@ if (ENV === 'development') {
 	const serverConfig = { serverSideRender: true, publicPath };
 	app.use(webpackDevMiddleware(compiler, serverConfig));
 	app.use(webpackHotMiddleware(compiler));
-} else {
-	// for production environment
-	app.use(express.static(`${__dirname}/public`)); // where to put bundles
-	app.use(helmet()); // helps you secure your Express apps by setting various HTTP headers
-	app.use((req, res, next) => {
-		// Do not expose the server framework
-		res.removeHeader('X-Powered-By');
+} else if (ENV === 'production') {
+	app.use((req, _, next) => {
+		if (!req.hashManifest) req.hashManifest = getManifest();
 		next();
 	});
+	app.use(express.static(`${__dirname}/public`)); // where to get bundles
+	app.use(
+		helmet({
+			// TODO : check for appropriate config, we should not simply disable it (only for test purposes)
+			contentSecurityPolicy: false,
+			crossOriginEmbedderPolicy: false,
+			crossOriginOpenerPolicy: false,
+			crossOriginResourcePolicy: false
+		})
+	);
+	app.disable('x-powered-by');
 }
 
-function setResponse(reactAppHtml, initialData) {
-	// TODO: take application/index.html template instead of a hardcoded string
+function setResponse(reactAppHtml, initialData, manifest) {
+	const mainStyles = manifest ? manifest['main.css'] : '/assets/app.css';
+	const mainBuild = manifest ? manifest['main.js'] : '/assets/app.js';
+
 	return `
 		<!DOCTYPE html>
 		<html lang="es-CO">
@@ -48,44 +57,44 @@ function setResponse(reactAppHtml, initialData) {
 				<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 				<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 				<title>Mercado Libre - Búsqueda de productos - SSR</title>
-				<link href="/assets/main.css" rel="stylesheet">
+				<link href="${mainStyles}" rel="stylesheet">
 			</head>
 			<body>
 				<div id="root">${reactAppHtml}</div>
 				<script>
 					window.__initial_data__ = ${JSON.stringify(initialData)}
 				</script>
-				<script src="/assets/app.js" type="text/javascript"></script>
+				<script src="${mainBuild}" type="text/javascript"></script>
 			</body>
 		</html>
 	`;
 }
 
-function renderApp(url, initialData = {}) {
+function renderApp(req, initialData = {}) {
 	const reactAppHtml = renderToString(
 		<StateProvider initialState={initialData}>
-			<StaticRouter location={url}>
+			<StaticRouter location={req.url}>
 				<App />
 			</StaticRouter>
 		</StateProvider>
 	);
-	return setResponse(reactAppHtml, initialData);
+	return setResponse(reactAppHtml, initialData, req.hashManifest);
 }
 
 /* SSR views */
 app.get('/', (req, res) => {
-	res.send(renderApp(req.url));
+	res.send(renderApp(req));
 });
 
 app.get('/items', async (req, res) => {
 	// Example: /items?search=ipod
 	const searchedProducts = await searchProducts(req.query.search);
-	res.send(renderApp(req.url, { searchedProducts }));
+	res.send(renderApp(req, { searchedProducts }));
 });
 
 app.get('/items/:id', async (req, res) => {
 	const productDetail = await getProductDetail(req.params.id);
-	res.send(renderApp(req.url, { productDetail }));
+	res.send(renderApp(req, { productDetail }));
 });
 
 /* API to get products */
@@ -103,5 +112,5 @@ app.get('/api/items/:id', async (req, res) => {
 
 app.listen(PORT, (err) => {
 	if (err) console.log(err);
-	else console.log(`Running nodemon server on port: ${PORT}`);
+	else console.log(`Running nodemon ${ENV} server on port: ${PORT}`);
 });

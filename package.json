@@ -4,9 +4,8 @@
 	"description": "SPA to search and view Meli products",
 	"main": "index.js",
 	"scripts": {
-		"build": "webpack --mode production",
+		"build": "webpack-cli --config webpack.config.js",
 		"build:dev": "webpack --mode development",
-		"dev:fe": "webpack-dev-server --mode development --open",
 		"start:dev": "nodemon src/server/index"
 	},
 	"keywords": [
@@ -26,7 +25,6 @@
 		"dotenv": "^16.0.0",
 		"express": "^4.17.2",
 		"helmet": "^5.0.2",
-		"html-webpack-plugin": "^5.5.0",
 		"ignore-styles": "^5.0.1",
 		"prop-types": "^15.8.1",
 		"react": "^17.0.2",
@@ -42,6 +40,7 @@
 		"@babel/preset-react": "^7.16.7",
 		"babel-eslint": "^10.1.0",
 		"babel-loader": "^8.2.3",
+		"compression-webpack-plugin": "^9.2.0",
 		"css-loader": "^6.6.0",
 		"eslint": "^8.9.0",
 		"eslint-config-airbnb": "^19.0.4",
@@ -57,7 +56,9 @@
 		"react-hot-loader": "^4.13.0",
 		"sass": "^1.49.7",
 		"sass-loader": "^12.4.0",
+		"terser-webpack-plugin": "^5.3.1",
 		"webpack-cli": "^4.9.2",
-		"webpack-dev-server": "^4.7.4"
+		"webpack-dev-server": "^4.7.4",
+		"webpack-manifest-plugin": "^4.1.1"
 	}
 }

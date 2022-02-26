@@ -1,29 +1,40 @@
 const webpack = require('webpack');
 const path = require('path');
-// const HtmlWebpackPlugin = require('html-webpack-plugin'); // comment this for SSR
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 
 require('dotenv').config();
 
+// NOTE: Another strategy could be to handle a different webpack.config files for each environment
 const isDev = process.env.ENV === 'development';
+const entry = ['@babel/polyfill', path.join(__dirname, 'src/client/index.js')];
+
+if (isDev) {
+	entry.push(
+		'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true'
+	);
+}
 
 module.exports = {
-	mode: 'development',
-	devtool: 'inline-source-map',
-	entry: [
-		'@babel/polyfill',
-		path.join(__dirname, 'src/client/index.js'),
-		'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=2000&reload=true' // comment this for CSR
-	],
+	mode: process.env.ENV, // development, production
+	// devtool: 'inline-source-map', // NOTE: enable this config to get sourceMaps, for dev pruposes only
+	entry,
 	output: {
-		path: path.resolve(__dirname, 'dist'),
-		filename: 'assets/app.js',
+		path: path.resolve(__dirname, 'src/server/public'),
+		filename: isDev ? 'assets/app.js' : 'assets/app-[hash].js',
 		publicPath: '/',
-		assetModuleFilename: isDev ? 'assets/[name][ext]' : 'assets/[hash][ext]'
+		assetModuleFilename: 'assets/[name][ext]'
+	},
+	resolve: {
+		extensions: ['.js', '.scss', '.png']
+	},
+	optimization: {
+		minimize: true,
+		minimizer: [new TerserPlugin()]
 	},
 	module: {
-		// rules help webpack to transpile javascript files using babel before bundling them
-		// we transpile to guarantee correct execution of the app in old browsers
 		rules: [
 			{
 				test: /\.?js$/,
@@ -31,8 +42,6 @@ module.exports = {
 				use: {
 					loader: 'babel-loader', // Helps webpack to use babel-core (transpiler)
 					options: {
-						// presets tell babel what to transpile (X to Js)
-						// @babel/preset-env' to transpile
 						presets: ['@babel/preset-env', '@babel/preset-react'],
 						plugins: ['react-hot-loader/babel']
 					}
@@ -58,18 +67,11 @@ module.exports = {
 		historyApiFallback: true
 	},
 	plugins: [
-		// comment this HtmlWebpackPlugin for SSR
-		/* new HtmlWebpackPlugin({
-			template: path.join(__dirname, 'src/application/index.html'),
-			inject: 'body'
-		}), */
+		!isDev ? new CompressionWebpackPlugin({ test: /\.js$|\.css$/ }) : () => {},
+		isDev ? new webpack.HotModuleReplacementPlugin() : () => {}, // helps with server hot reload y dev mode
+		!isDev ? new WebpackManifestPlugin() : () => {},
 		new MiniCssExtractPlugin({
-			filename: isDev ? 'assets/[name].css' : 'assets/[name].[hash].css',
-			chunkFilename: isDev ? 'assets/[id].css' : 'assets/[id].[hash].css'
-		}),
-		new webpack.HotModuleReplacementPlugin() // helps with server hot reload
-	],
-	resolve: {
-		extensions: ['.js', '.scss', '.png']
-	}
+			filename: isDev ? 'assets/app.css' : 'assets/app-[hash].css'
+		})
+	]
 };
