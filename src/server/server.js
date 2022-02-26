@@ -27,7 +27,7 @@ if (ENV === 'development') {
 	const serverConfig = { serverSideRender: true, publicPath };
 	app.use(webpackDevMiddleware(compiler, serverConfig));
 	app.use(webpackHotMiddleware(compiler));
-} else if (ENV === 'production') {
+} else {
 	app.use((req, _, next) => {
 		if (!req.hashManifest) req.hashManifest = getManifest();
 		next();
@@ -35,7 +35,7 @@ if (ENV === 'development') {
 	app.use(express.static(`${__dirname}/public`)); // where to get bundles
 	app.use(
 		helmet({
-			// TODO : check for appropriate config, we should not simply disable it (only for test purposes)
+			// NOTE: We should check for appropriate config, we should not simply disable it (only for test purposes)
 			contentSecurityPolicy: false,
 			crossOriginEmbedderPolicy: false,
 			crossOriginOpenerPolicy: false,
@@ -48,6 +48,7 @@ if (ENV === 'development') {
 function setResponse(reactAppHtml, initialData, manifest) {
 	const mainStyles = manifest ? manifest['main.css'] : '/assets/app.css';
 	const mainBuild = manifest ? manifest['main.js'] : '/assets/app.js';
+	const vendorBuild = manifest ? manifest['vendors.js'] : '/assets/vendor.js';
 
 	return `
 		<!DOCTYPE html>
@@ -65,6 +66,7 @@ function setResponse(reactAppHtml, initialData, manifest) {
 					window.__initial_data__ = ${JSON.stringify(initialData)}
 				</script>
 				<script src="${mainBuild}" type="text/javascript"></script>
+				<script src="${vendorBuild}" type="text/javascript"></script>
 			</body>
 		</html>
 	`;

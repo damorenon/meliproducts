@@ -19,20 +19,42 @@ if (isDev) {
 
 module.exports = {
 	mode: process.env.ENV, // development, production
-	// devtool: 'inline-source-map', // NOTE: enable this config to get sourceMaps, for dev pruposes only
+	// devtool: 'inline-source-map', // NOTE: enable this config to get sourceMaps, for dev purposes only
 	entry,
 	output: {
 		path: path.resolve(__dirname, 'src/server/public'),
 		filename: isDev ? 'assets/app.js' : 'assets/app-[hash].js',
 		publicPath: '/',
-		assetModuleFilename: 'assets/[name][ext]'
+		assetModuleFilename: 'assets/[name][ext]',
+		clean: true
 	},
 	resolve: {
 		extensions: ['.js', '.scss', '.png']
 	},
 	optimization: {
 		minimize: true,
-		minimizer: [new TerserPlugin()]
+		minimizer: [new TerserPlugin()],
+		splitChunks: {
+			chunks: 'async',
+			cacheGroups: {
+				vendors: {
+					name: 'vendors',
+					chunks: 'all',
+					reuseExistingChunk: true,
+					priority: 1,
+					filename: isDev
+						? 'assets/vendor.js'
+						: 'assets/vendor-[contenthash].js',
+					enforce: true,
+					test(module, chunks) {
+						const name = module.nameForCondition && module.nameForCondition();
+						return (
+							chunks.name !== 'vendors' && /[\\/]node_modules[\\/]/.test(name)
+						);
+					}
+				}
+			}
+		}
 	},
 	module: {
 		rules: [
