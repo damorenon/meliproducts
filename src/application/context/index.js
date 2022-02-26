@@ -38,20 +38,22 @@ StateProvider.propTypes = {
 				lastname: PropTypes.string
 			}),
 			categories: PropTypes.arrayOf(PropTypes.string),
-			items: PropTypes.shape({
-				id: PropTypes.string,
-				title: PropTypes.string,
-				price: PropTypes.shape({
-					currency: PropTypes.string,
-					amount: PropTypes.number,
-					decimals: PropTypes.number,
-					symbol: PropTypes.string
-				}),
-				picture: PropTypes.string,
-				condition: PropTypes.string,
-				free_shipping: PropTypes.bool,
-				location: PropTypes.string
-			})
+			items: PropTypes.arrayOf(
+				PropTypes.shape({
+					id: PropTypes.string,
+					title: PropTypes.string,
+					price: PropTypes.shape({
+						currency: PropTypes.string,
+						amount: PropTypes.number,
+						decimals: PropTypes.number,
+						symbol: PropTypes.string
+					}),
+					picture: PropTypes.string,
+					condition: PropTypes.string,
+					free_shipping: PropTypes.bool,
+					location: PropTypes.string
+				})
+			)
 		}),
 		productDetail: PropTypes.shape({
 			author: PropTypes.shape({
@@ -59,7 +61,7 @@ StateProvider.propTypes = {
 				lastname: PropTypes.string
 			}),
 			categories: PropTypes.arrayOf(PropTypes.string),
-			items: PropTypes.shape({
+			item: PropTypes.shape({
 				id: PropTypes.string,
 				title: PropTypes.string,
 				price: PropTypes.shape({

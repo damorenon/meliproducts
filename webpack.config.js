@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 
 require('dotenv').config();
 
@@ -89,6 +90,7 @@ module.exports = {
 		historyApiFallback: true
 	},
 	plugins: [
+		isDev ? new ESLintPlugin() : () => {},
 		!isDev ? new CompressionWebpackPlugin({ test: /\.js$|\.css$/ }) : () => {},
 		isDev ? new webpack.HotModuleReplacementPlugin() : () => {}, // helps with server hot reload y dev mode
 		!isDev ? new WebpackManifestPlugin() : () => {},

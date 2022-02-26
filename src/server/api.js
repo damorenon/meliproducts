@@ -28,8 +28,8 @@ export async function searchProducts(query) {
 				price: {
 					currency: item.currency_id,
 					amount: item.price,
-					decimals: 2, // NOTE: it's not in search API, it should be there, it should not do 4 api calls here,
-					symbol: '$'
+					decimals: 2, // NOTE: it's not in search API, it should be there, I'd request it to Backend, we should avoid 4 api calls here
+					symbol: '$' // NOTE: it's not in search API, it should be there, I'd request it to Backend, we should avoid 4 api calls here
 				},
 				picture: item.thumbnail,
 				condition: item.condition,
