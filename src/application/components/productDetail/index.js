@@ -70,7 +70,7 @@ function ProductDetail() {
 		<section>
 			{!!Object.keys(item).length && (
 				<>
-					{!!categories.length && <Breadcrumbs categories={categories} />}
+					<Breadcrumbs categories={categories} />
 					<article className="productdetail__container">
 						<div className="productdetail__product">
 							<figure className="productdetail__imagecontainer">

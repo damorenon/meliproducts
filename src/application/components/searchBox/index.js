@@ -24,15 +24,25 @@ function SearchBox() {
 
 	async function searchProducts(event) {
 		event.preventDefault(); // To avoid page reload by default
-		const {
-			data: { searchedProducts }
-		} = await axios(`/api/items?q=${searchInput}`);
-		dispatch({
-			type: 'SET_SEARCHED_PRODUCTS',
-			payload: { searchedProducts }
-		});
+		try {
+			const {
+				data: { searchedProducts }
+			} = await axios(`/api/items?q=${searchInput}`);
+			dispatch({
+				type: 'SET_SEARCHED_PRODUCTS',
+				payload: { searchedProducts }
+			});
+		} catch {
+			dispatch({
+				type: 'SET_SEARCHED_PRODUCTS',
+				payload: {
+					searchedProducts: { items: [], categories: [], apiError: true }
+				}
+			});
+		}
 		navigate(`/items?search=${searchInput}`);
 	}
+
 	return (
 		<div className="searchbox__container">
 			<Link

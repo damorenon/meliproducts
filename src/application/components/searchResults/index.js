@@ -22,7 +22,7 @@ function SearchResults() {
 
 	return (
 		<section>
-			{!!categories.length && <Breadcrumbs categories={categories} />}
+			<Breadcrumbs categories={categories} />
 			<ul className="searchbox__itemslist">
 				{items.map((item) => (
 					<SearchedProduct key={item.id} product={item} />
