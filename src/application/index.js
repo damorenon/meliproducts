@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Layout from './components/layout';
 import SearchResults from './components/searchResults';
 import ProductDetail from './components/productDetail';
+import NotFound from './components/notFound';
 import './index.scss';
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
 				<Route path="items" element={<SearchResults />} />
 				<Route path="items/:id" element={<ProductDetail />} />
 			</Route>
-			{/* TODO: <Route path="*" element={<NotFound />} /> */}
+			<Route path="*" element={<NotFound />} />
 		</Routes>
 	);
 }

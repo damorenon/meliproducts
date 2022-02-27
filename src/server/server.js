@@ -28,6 +28,7 @@ if (ENV === 'development') {
 	app.use(webpackDevMiddleware(compiler, serverConfig));
 	app.use(webpackHotMiddleware(compiler));
 } else {
+	// Production stuff
 	app.use((req, _, next) => {
 		if (!req.hashManifest) req.hashManifest = getManifest();
 		next();
@@ -91,11 +92,18 @@ app.get('/', (req, res) => {
 app.get('/items', async (req, res) => {
 	// Example: /items?search=ipod
 	const searchedProducts = await searchProducts(req.query.search);
+	if (searchedProducts.apiError) {
+		// NOTE: we should capture other statuses here
+		res.status(404);
+	}
 	res.send(renderApp(req, { searchedProducts }));
 });
 
 app.get('/items/:id', async (req, res) => {
 	const productDetail = await getProductDetail(req.params.id);
+	if (productDetail.apiError) {
+		res.status(404);
+	}
 	res.send(renderApp(req, { productDetail }));
 });
 
@@ -103,12 +111,18 @@ app.get('/items/:id', async (req, res) => {
 app.get('/api/items', async (req, res) => {
 	// Example: /api/items?q=ipod
 	const searchedProducts = await searchProducts(req.query.q);
+	if (searchedProducts.apiError) {
+		res.status(404);
+	}
 	res.send({ searchedProducts });
 });
 
 app.get('/api/items/:id', async (req, res) => {
 	// Example: /api/items/MLA1123998092
 	const productDetail = await getProductDetail(req.params.id);
+	if (productDetail.apiError) {
+		res.status(404);
+	}
 	res.send({ productDetail });
 });
 

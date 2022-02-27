@@ -53,7 +53,8 @@ StateProvider.propTypes = {
 					free_shipping: PropTypes.bool,
 					location: PropTypes.string
 				})
-			)
+			),
+			apiError: PropTypes.bool
 		}),
 		productDetail: PropTypes.shape({
 			author: PropTypes.shape({
@@ -76,7 +77,8 @@ StateProvider.propTypes = {
 				sold_quantity: PropTypes.number,
 				description: PropTypes.string
 			})
-		})
+		}),
+		apiError: PropTypes.bool
 	}).isRequired,
 	children: PropTypes.node.isRequired
 };

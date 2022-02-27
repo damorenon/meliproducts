@@ -1,0 +1,22 @@
+@use '../../assets/styles/variables';
+
+.notfound__container {
+	margin-top: variables.$space-lg;
+	padding: variables.$space-lg;
+	background-color: variables.$meli-white;
+	display: flex;
+	align-items: center;
+	justify-content: space-evenly;
+}
+
+.notfound__title {
+	font-size: 24px;
+	font-weight: 600;
+	line-height: 1.08;
+	margin-bottom: variables.$space-md;
+}
+
+.notfound__reasons {
+	list-style-type: square;
+	padding-left: variables.$space-md;
+}

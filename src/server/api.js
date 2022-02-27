@@ -13,6 +13,7 @@ const author = { name: 'David', lastname: 'Moreno' };
 export async function searchProducts(query) {
 	let items = [];
 	let categories = [];
+	let apiError = false;
 
 	try {
 		const response = await axios(`${API_URL}/sites/MLA/search?q=${query}`);
@@ -52,13 +53,17 @@ export async function searchProducts(query) {
 			}
 		}
 	} catch (error) {
-		console.log(`Error while getting ${API_URL}/sites/MLA/search?q=${query}`);
+		console.log(
+			`Error while getting ${API_URL}/sites/MLA/search?q=${query}: ${error}`
+		);
+		apiError = true;
 	}
 
 	return {
 		author,
 		categories,
-		items
+		items,
+		apiError
 	};
 }
 
@@ -75,6 +80,7 @@ async function fetcher(url) {
 export async function getProductDetail(productId) {
 	let item = {};
 	let categories = [];
+	let apiError = false;
 
 	try {
 		const productPromises = Promise.all([
@@ -127,12 +133,16 @@ export async function getProductDetail(productId) {
 			}
 		}
 	} catch (error) {
-		console.log(`Error while getting ${API_URL}/items/${productId} and others`);
+		console.log(
+			`Error while getting ${API_URL}/items/${productId} and others: ${error}`
+		);
+		apiError = true;
 	}
 
 	return {
 		author,
 		item,
-		categories
+		categories,
+		apiError
 	};
 }

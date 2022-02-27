@@ -1,27 +1,6 @@
 @use '../../assets/styles/variables';
 @use '../../assets/styles/mixins';
 
-.searchbox__notfound {
-	margin-top: variables.$space-lg;
-	padding: variables.$space-lg;
-	background-color: variables.$meli-white;
-	display: flex;
-	align-items: center;
-	justify-content: space-evenly;
-}
-
-.searchbox__notfoundtitle {
-	font-size: 24px;
-	font-weight: 600;
-	line-height: 1.08;
-	margin-bottom: variables.$space-md;
-}
-
-.searchbox__notfoundreasons {
-	list-style-type: square;
-	padding-left: variables.$space-md;
-}
-
 .searchbox__itemslist {
 	margin-bottom: variables.$space-xxl;
 }

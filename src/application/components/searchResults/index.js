@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { store } from '../../context';
 import Breadcrumbs from '../breadcrumbs';
 import freeShippingIcon from '../../assets/static/ic_shipping.png';
-import notFoundIcon from '../../assets/static/ic_notfound.png';
+import NotFound from '../notFound';
 import './index.scss';
 
 /**
@@ -17,25 +17,12 @@ function SearchResults() {
 	const { items = [], categories = [] } = searchedProducts;
 
 	if (!items.length) {
-		return (
-			<div className="searchbox__notfound">
-				<img src={notFoundIcon} alt="Not found icon" />
-				<div>
-					<h3 className="searchbox__notfoundtitle">
-						No hay publicaciones que coincidan con tu búsqueda.
-					</h3>
-					<ul className="searchbox__notfoundreasons">
-						<li>Revisa la ortografía de la palabra</li>
-						<li>Utiliza palabras más genéricas o menos palabras</li>
-					</ul>
-				</div>
-			</div>
-		);
+		return <NotFound />;
 	}
 
 	return (
 		<section>
-			<Breadcrumbs categories={categories} />
+			{!!categories.length && <Breadcrumbs categories={categories} />}
 			<ul className="searchbox__itemslist">
 				{items.map((item) => (
 					<SearchedProduct key={item.id} product={item} />

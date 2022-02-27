@@ -4,30 +4,41 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { store } from '../../context';
 import Breadcrumbs from '../breadcrumbs';
+import NotFound from '../notFound';
 import './index.scss';
 
 /**
- * Component that shows the detailed info od the selected product
+ * Component that shows the detailed info of the selected product
  *
  * @returns {JSX.Element}
  */
 function ProductDetail() {
 	const { state: { productDetail = {} } = {}, dispatch } = useContext(store);
-	const { item = {}, categories = [] } = productDetail;
+	const { item = {}, categories = [], apiError } = productDetail;
 	const { id: productId } = useParams();
 
 	async function getProductDetail() {
-		const {
-			data: { productDetail: foundProductDetail }
-		} = await axios(`/api/items/${productId}`);
-		dispatch({
-			type: 'SET_PRODUCT_DETAIL',
-			payload: { productDetail: foundProductDetail }
-		});
+		try {
+			const {
+				data: { productDetail: foundProductDetail }
+			} = await axios(`/api/items/${productId}`);
+			dispatch({
+				type: 'SET_PRODUCT_DETAIL',
+				payload: { productDetail: foundProductDetail }
+			});
+		} catch (error) {
+			dispatch({
+				type: 'SET_PRODUCT_DETAIL',
+				payload: { productDetail: { item: {}, categories: [], apiError: true } }
+			});
+		}
 	}
 
 	useEffect(() => {
-		getProductDetail();
+		// NOTE: To avoid unneeded call when hydrating after SSR
+		if (!Object.keys(item).length && !apiError) {
+			getProductDetail();
+		}
 		return () => {
 			dispatch({ type: 'CLEAN_PRODUCT_DETAIL' });
 		};
@@ -50,37 +61,45 @@ function ProductDetail() {
 		return `${symbol} ${numberFormat.format(parseFloat(amount))}`;
 	}
 
+	if (apiError) {
+		return <NotFound />;
+	}
+
 	/* NOTE: should be ok to use a 'spinner + overlay' or skeleton placeholder while loading data */
 	return (
 		<section>
-			<Breadcrumbs categories={categories} />
-			<article className="productdetail__container">
-				<div className="productdetail__product">
-					<figure className="productdetail__imagecontainer">
-						<img
-							src={picture}
-							alt="searched product"
-							className="producdetail__image"
-						/>
-					</figure>
-					<div>
-						<h2 className="productdetail__desctitle">
-							Descripción del Producto
-						</h2>
-						<p className="productdetail__description">{description}</p>
-					</div>
-				</div>
-				<div className="productdetail__detail">
-					<div className="productdetail__condition">{`${
-						condition === 'new' ? 'Nuevo' : 'Usado'
-					} - ${soldQty ?? 0} vendidos`}</div>
-					<h2 className="productdetail__title">{title}</h2>
-					<div className="productdetail__price">{formatPrice(price)}</div>
-					<button type="button" className="productdetail__button">
-						Comprar
-					</button>
-				</div>
-			</article>
+			{!!Object.keys(item).length && (
+				<>
+					{!!categories.length && <Breadcrumbs categories={categories} />}
+					<article className="productdetail__container">
+						<div className="productdetail__product">
+							<figure className="productdetail__imagecontainer">
+								<img
+									src={picture}
+									alt="searched product"
+									className="producdetail__image"
+								/>
+							</figure>
+							<div>
+								<h2 className="productdetail__desctitle">
+									Descripción del Producto
+								</h2>
+								<p className="productdetail__description">{description}</p>
+							</div>
+						</div>
+						<div className="productdetail__detail">
+							<div className="productdetail__condition">{`${
+								condition === 'new' ? 'Nuevo' : 'Usado'
+							} - ${soldQty ?? 0} vendidos`}</div>
+							<h2 className="productdetail__title">{title}</h2>
+							<div className="productdetail__price">{formatPrice(price)}</div>
+							<button type="button" className="productdetail__button">
+								Comprar
+							</button>
+						</div>
+					</article>
+				</>
+			)}
 		</section>
 	);
 }
